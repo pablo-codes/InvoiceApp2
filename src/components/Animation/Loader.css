@@ -1,0 +1,20 @@
+/* Loader.css */
+.loader {
+  border: 6px solid #f3f3f3; /* Light gray border */
+  border-top: 6px solid #3498db; /* Blue border on top */
+  border-radius: 50%; /* Make it a circle */
+  width: 30px; /* Set the width and height */
+  height: 30px;
+  margin-right: 4px;
+  display: inline;
+  animation: spin 2s linear infinite; /* Rotate animation */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
