@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../Settings/admin-css.css";
-import InvoiceServices from "../../services/invoice-services";
-import { useCookies } from "react-cookie";
 import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
 import Loader from "../Animation/Loader";
 
 const Invoice = () => {
-  const [cookies, setcookies] = useCookies(["token"]);
 
   const initarr = [
     {
@@ -32,8 +29,8 @@ const Invoice = () => {
     companyAddress: "",
     companyWhatsapp: "",
   };
-  const [obj, setObj] = useState(initobj);
   const [from, setFrom] = useState(initialSettings);
+  const [obj, setObj] = useState(initobj);
   const [arr, setArr] = useState(initarr);
   const [total, setTotal] = useState(0);
   const [note, setNote] = useState("");
@@ -69,7 +66,9 @@ const Invoice = () => {
     IdbService.readSettings()
       .then((e) => {
         setFrom(e.data);
-        console.log(e.data);
+        document.getElementById(
+          "img"
+        ).style.backgroundImage = `url(${e.data.companyLogo})`;
       })
       .catch((err) => {
         console.log(err);
@@ -187,6 +186,8 @@ const Invoice = () => {
         .catch((el) => {
           console.log(el.success);
         });
+    } else {
+      document.getElementById("error").style.display = "inline";
     }
     // InvoiceServices.create(cookies.token, { arr, obj, note }).then((res) => {
     //     console.log(res.data)
@@ -202,14 +203,14 @@ const Invoice = () => {
           <div className="col-md-12">
             <div className="before-table-2">
               <div className="invoice-cats">
-                <a href="#">
+               
                   <div>Preview</div>
-                </a>
+              
               </div>
 
-              <a href="#new-invoice">
+             
                 <div className="new-invoice-2">Download</div>
-              </a>
+            
             </div>
 
             <div className="invoice-div">
@@ -217,18 +218,17 @@ const Invoice = () => {
                 <div className="inv-num">
                   <h1>INV{lastId}</h1>
                 </div>
-                <div className="logo-box">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    name="fileud"
-                    id="fileud"
-                    style={{ display: "none" }}
-                  />
-                  <label htmlFor="fileud" style={{ cursor: "pointer" }}>
-                    + Logo
-                  </label>
-                </div>
+                <div
+                  id="img"
+                  className="logo-box-2"
+                  style={{
+                    width: "469px",
+                    height: "286px",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "469px,286px",
+                  }}
+                ></div>
               </div>
 
               <div className="part-2">
@@ -416,7 +416,7 @@ const Invoice = () => {
                         </td>
                       </tr>
                       <tr id="tbtd-p">
-                        <td>
+                        <td id="error" style={{ display: "none" }}>
                           <h4 id="lengd" class="text text-danger">
                             <AiOutlineStop /> fill all the boxes
                           </h4>

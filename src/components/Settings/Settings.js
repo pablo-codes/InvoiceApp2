@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./admin-css.css";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { AiOutlineStop } from "react-icons/ai";
 import cloudinaryService from "../../services/cloudinary-services";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ const Settings = () => {
   const initimage = {
     files: { 0: {}, length: "" },
   };
-  const [cookies, setcookies] = useCookies(["token"]);
+  // const [cookies, setcookies] = useCookies(["token"]);
   const [settings, setSettings] = useState(initialSettings);
   const [image, setImage] = useState(initimage);
   const [loader, setLoader] = useState();
@@ -35,20 +35,18 @@ const Settings = () => {
     // setcookies("token", "biglongshlong", { path: "/", expires: news });
 
     if (image.files) {
-      if (settings.companyEmail) {
-        console.log(image.files);
-      }
-      console.log(settings.companyLogo);
+    
+    
       document.getElementById(
         "img"
       ).style.backgroundImage = `url(${settings.companyLogo})`;
     }
-  }, [settings]);
+  }, [image,settings]);
 
   useEffect(() => {
     IdbService.readSettings()
       .then((res) => {
-        console.log(res.success, res.data);
+        console.log(res.success, res.message);
         if (res.data) {
           setSettings(res.data);
         }
@@ -56,7 +54,7 @@ const Settings = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [cookies.token]);
+  }, []);
 
   const handlePostChange = (event) => {
     const { name, value } = event.target;
@@ -66,7 +64,7 @@ const Settings = () => {
   const handleImageChange = (event) => {
     const pic = event.target.files;
     if (pic.length === 1) {
-      setImage({ ...image, ["files"]: event.target.files[0] });
+      setImage({ ...image, "files": event.target.files[0] });
 
       const uri = URL.createObjectURL(event.target.files[0]);
 

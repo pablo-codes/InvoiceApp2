@@ -1,18 +1,16 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Settings/admin-css.css";
-import InvoiceServices from "../../services/invoice-services";
-import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
 import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
 import Loader from "../Animation/Loader";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 const UpdateInvoice = () => {
-  const [cookies, setcookies] = useCookies(["token"]);
-
   const initarr = [
     {
-      key: 1,
+      key: "",
       description: "",
       qty: "",
       rate: "",
@@ -25,6 +23,16 @@ const UpdateInvoice = () => {
     address: "",
     phone: +234,
   };
+  const initialSettings = {
+    companyName: "",
+    companyEmail: "",
+    companyLogo: "",
+    companyPhoneNumber: "",
+    companyAddress: "",
+    companyWhatsapp: "",
+  };
+
+  const [from, setFrom] = useState(initialSettings);
   const [obj, setObj] = useState(initobj);
   const [arr, setArr] = useState(initarr);
   const [total, setTotal] = useState(0);
@@ -32,7 +40,7 @@ const UpdateInvoice = () => {
   const [loader, setLoader] = useState();
   const [lastId, setLastId] = useState(0);
   const [tots, setTots] = useState(0);
-  const [date,Setdate]=useState()
+  const [date, Setdate] = useState();
   const { id } = useParams();
   const add = () => {
     const news = arr.length + 1;
@@ -51,17 +59,28 @@ const UpdateInvoice = () => {
     IdbService.getInvoice(Number(id))
       .then((e) => {
         if (e.data.arr.length > 1) {
+          console.log(e.data.arr);
           setArr(e.data.arr);
         }
         setLastId(id);
         setObj(e.data.obj);
         setNote(e.data.note);
-        Setdate(e.data.date)
+        Setdate(e.data.date);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
+    IdbService.readSettings()
+      .then((e) => {
+        setFrom(e.data);
+        document.getElementById(
+          "img"
+        ).style.backgroundImage = `url(${e.data.companyLogo})`;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id, arr]);
 
   const Change = (e) => {
     setObj({ ...obj, [e.target.name]: e.target.value });
@@ -85,6 +104,16 @@ const UpdateInvoice = () => {
     setArr(updatedData);
   };
 
+  const downloadPdfDocument = () => {
+    const input = document.getElementById("pdf");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "JPEG", 0, 0);
+      pdf.save(`${id}.pdf`);
+    });
+  };
+
   useEffect(() => {
     let sum = 0;
 
@@ -102,6 +131,7 @@ const UpdateInvoice = () => {
       }
     });
     setTots(tot);
+    console.log(arr);
 
     setTotal(sum);
   }, [arr]);
@@ -156,9 +186,10 @@ const UpdateInvoice = () => {
   const Post = (e) => {
     e.preventDefault();
     if (tots > 0 && tots === arr.length) {
+      document.getElementById("lengd").style.display = "none";
       setLoader(true);
       const update = new Date();
-      IdbService.updateInvoice(id, { arr, obj, note,date, total,update })
+      IdbService.updateInvoice(id, { arr, obj, note, date, total, update })
         .then((e) => {
           setLoader(false);
           console.log(e.success, e.message);
@@ -166,6 +197,8 @@ const UpdateInvoice = () => {
         .catch((el) => {
           console.log(el.success);
         });
+    } else {
+      document.getElementById("lengd").style.display = "inline";
     }
     // InvoiceServices.create(cookies.token, { arr, obj, note }).then((res) => {
     //     console.log(res.data)
@@ -181,33 +214,37 @@ const UpdateInvoice = () => {
           <div className="col-md-12">
             <div className="before-table-2">
               <div className="invoice-cats">
-                <a href="#">
-                  <div>Preview</div>
-                </a>
+                <div>Preview</div>
               </div>
 
-              <a href="#new-invoice">
-                <div className="new-invoice-2">Download</div>
-              </a>
+              <div className="new-invoice-2">
+                <btn
+                  className="btn btn-primary"
+                  onClick={() => {
+                    downloadPdfDocument();
+                  }}
+                >
+                  Download
+                </btn>
+              </div>
             </div>
 
-            <div className="invoice-div">
+            <div className="invoice-div" id="pdf">
               <div className="part-1">
                 <div className="inv-num">
                   <h1>INV{lastId}</h1>
                 </div>
-                <div className="logo-box">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    name="fileud"
-                    id="fileud"
-                    style={{ display: "none" }}
-                  />
-                  <label htmlFor="fileud" style={{ cursor: "pointer" }}>
-                    + Logo
-                  </label>
-                </div>
+                <div
+                  id="img"
+                  className="logo-box-2"
+                  style={{
+                    width: "469px",
+                    height: "286px",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "469px,286px",
+                  }}
+                ></div>
               </div>
 
               <div className="part-2">
@@ -217,6 +254,8 @@ const UpdateInvoice = () => {
                     <input
                       type="text"
                       className="form-control"
+                      readOnly
+                      value={from.companyName}
                       name="fromname"
                     />
                     <label htmlFor="fromname">Name</label>
@@ -225,6 +264,8 @@ const UpdateInvoice = () => {
                     <input
                       type="email"
                       className="form-control"
+                      readOnly
+                      value={from.companyEmail}
                       name="fromemail"
                     />
                     <label htmlFor="fromemail">Email</label>
@@ -233,6 +274,8 @@ const UpdateInvoice = () => {
                     <input
                       type="text"
                       className="form-control"
+                      readOnly
+                      value={from.companyAddress}
                       name="fromaddress"
                     />
                     <label htmlFor="fromaddress">Address</label>
@@ -241,6 +284,8 @@ const UpdateInvoice = () => {
                     <input
                       type="text"
                       className="form-control"
+                      readOnly
+                      value={from.companyPhoneNumber}
                       name="fromphonenumber"
                     />
                     <label htmlFor="fromphonenumber">Phone Number</label>
@@ -249,6 +294,8 @@ const UpdateInvoice = () => {
                     <input
                       type="text"
                       className="form-control"
+                      value={from.companyWhatsapp}
+                      readOnly
                       name="frombusinessnumber"
                     />
                     <label htmlFor="frombusinessnumber">Business Number</label>
@@ -385,8 +432,8 @@ const UpdateInvoice = () => {
                         </td>
                       </tr>
                       <tr id="tbtd-p">
-                        <td>
-                          <h4 id="lengd" class="text text-danger">
+                        <td id="lengd" style={{ display: "none" }}>
+                          <h4 className="text text-danger">
                             <AiOutlineStop /> fill all the boxes
                           </h4>
                         </td>
@@ -401,14 +448,6 @@ const UpdateInvoice = () => {
               </div>
 
               <div className="part-4">
-                <div>
-                  <legend
-                    style={{ width: "31%", position: "relative", left: "65%" }}
-                    class="legendn text-danger"
-                  >
-                    <AiOutlineStop /> fill all the boxes
-                  </legend>
-                </div>
                 <div></div>
                 <p>Notes</p>
                 <textarea
