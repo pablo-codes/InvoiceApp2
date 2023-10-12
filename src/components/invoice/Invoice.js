@@ -3,9 +3,9 @@ import "../Settings/admin-css.css";
 import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
 import Loader from "../Animation/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Invoice = () => {
-
   const initarr = [
     {
       key: 1,
@@ -37,7 +37,7 @@ const Invoice = () => {
   const [loader, setLoader] = useState();
   const [lastId, setLastId] = useState(0);
   const [tots, setTots] = useState(0);
-
+  const navigate = useNavigate;
   const add = () => {
     const news = arr.length + 1;
     setArr((e) => [
@@ -181,6 +181,7 @@ const Invoice = () => {
       IdbService.createInvoice({ arr, obj, note, date, total })
         .then((e) => {
           setLoader(false);
+          navigate(`/all-invoice`);
           console.log(e.success, e.message);
         })
         .catch((el) => {
@@ -203,14 +204,10 @@ const Invoice = () => {
           <div className="col-md-12">
             <div className="before-table-2">
               <div className="invoice-cats">
-               
-                  <div>Preview</div>
-              
+                <div>Preview</div>
               </div>
 
-             
-                <div className="new-invoice-2">Download</div>
-            
+              <div className="new-invoice-2">Download</div>
             </div>
 
             <div className="invoice-div">
