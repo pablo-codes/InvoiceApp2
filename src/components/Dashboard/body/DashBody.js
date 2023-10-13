@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { Link, Outlet } from "react-router-dom";
 import DashNav from "./DashNav";
 import "../css/bootstrap1.css";
@@ -8,22 +7,24 @@ import "../css/metisMenu.css";
 import img1 from "../img/icon_search.svg";
 import img2 from "../img/bell.svg";
 import img3 from "../img/msg.svg";
+import IdbService from "../../../services/idb-services";
 
 // import indexService from '../../../services/indexService';
 
 const DashBody = () => {
-  const initialDetails = {
-    user: {
-      username: "",
-      role: "",
-      image: "",
-    },
-    total: "",
-    images: "",
-    avatar: "",
+  const initialSettings = {
+    companyName: "",
+    companyEmail: "",
+    companyLogo: "",
+    companyPhoneNumber: "",
+    companyAddress: "",
+    companyWhatsapp: "",
   };
+
+  const [from, setFrom] = useState(initialSettings);
+  const [query, setQuery] = useState("");
   //const [cookies, setCookies] = useCookies(['token'])
-  const [Details, setDetails] = useState(initialDetails);
+  // const [Details, setDetails] = useState(initialDetails);
   //const id = cookies.token
   // const responses = (id) => {
   //     indexService.index(id)
@@ -36,10 +37,16 @@ const DashBody = () => {
   //         });
   // }
 
-  // useEffect(() => {
-
-  //     responses(id)
-  // }, [id])
+  useEffect(() => {
+    IdbService.readSettings()
+      .then((e) => {
+        setFrom(e.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    //     responses(id)
+  }, []);
 
   return (
     <>
@@ -56,7 +63,14 @@ const DashBody = () => {
                   <div className="search_inner">
                     <form action="client.github.io/#/dashboard">
                       <div className="search_field">
-                        <input type="text" placeholder="Search here..." />
+                        <input
+                          type="text"
+                          placeholder="Search name "
+                          value={query}
+                          onChange={(e) => {
+                            setQuery(e.target.value);
+                          }}
+                        />
                       </div>
                       <button type="submit">
                         <img src={img1} alt="" />
@@ -79,36 +93,30 @@ const DashBody = () => {
                   </div>
                   <div className="profile_info">
                     {(function () {
-                      if (!Details.user.image) {
+                      if (from) {
                         return (
-                          <div className="avatar-xs">
-                            <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                              {Details.avatar}
-                            </span>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <img src={Details.user.image} alt="profile-pic" />
+                          <>
+                            <img src={from.companyLogo} alt="profile-pic" />
+                            <div className="profile_info_iner">
+                              <p>Welcome user!</p>
+                              <h5>{from.companyName}</h5>
+                              <div className="profile_info_details">
+                                <Link to="/profile">
+                                  My Profile <i className="ti-user"></i>
+                                </Link>
+                                <Link to="/settings">
+                                  {" "}
+                                  Settings <i className="ti-settings"></i>
+                                </Link>
+                                <a href="">
+                                  Log Out <i className="ti-shift-left"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </>
                         );
                       }
-                    })(Details.user.image)}
-                    <div className="profile_info_iner">
-                      <p>Welcome {Details.user.role}!</p>
-                      <h5>{Details.user.username}</h5>
-                      <div className="profile_info_details">
-                        <Link to="/profile">
-                          My Profile <i className="ti-user"></i>
-                        </Link>
-                        <Link to="/settings">
-                          {" "}
-                          Settings <i className="ti-settings"></i>
-                        </Link>
-                        <a href="">
-                          Log Out <i className="ti-shift-left"></i>
-                        </a>
-                      </div>
-                    </div>
+                    })(from)}
                   </div>
                 </div>
               </div>
@@ -116,7 +124,7 @@ const DashBody = () => {
           </div>
         </div>
 
-        <Outlet />
+        <Outlet context={query} />
 
         <div className="footer_part">
           <div className="container-fluid">

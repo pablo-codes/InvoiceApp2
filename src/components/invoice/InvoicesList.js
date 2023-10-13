@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import IdbService from "../../services/idb-services";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
-const InvoiceList = () => {
-  const [data, setData] = useState([]);
+const InvoiceList = (props) => {
   const [invoices, setInvoices] = useState([]);
+  const query = useOutletContext();
+
   const navigate = useNavigate();
   useEffect(() => {
-    IdbService.readInvoices().then((e) => {
-      // setInvoices(e.data)
-      setInvoices(e.data);
+    if (query) {
+      console.log(query);
+      const matches = invoices.filter((item) => {
+        const regex = new RegExp(query, "i");
+        return regex.test(item.obj.name);
+      });
+      setInvoices(matches);
+    } else {
+      IdbService.readInvoices()
+        .then((e) => {
+          // setInvoices(e.data)
+          setInvoices(e.data);
 
-      // console.log(e.data);
-    });
-  }, []);
+          // console.log(e.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [query]);
 
   const invoiceListTable = (
     <table className="table table-striped">

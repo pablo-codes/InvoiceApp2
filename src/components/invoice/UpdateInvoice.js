@@ -5,8 +5,7 @@ import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
 import Loader from "../Animation/Loader";
 import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
-
+import jsPDF from "jspdf";
 const UpdateInvoice = () => {
   const initarr = [
     {
@@ -59,7 +58,6 @@ const UpdateInvoice = () => {
     IdbService.getInvoice(Number(id))
       .then((e) => {
         if (e.data.arr.length > 1) {
-          console.log(e.data.arr);
           setArr(e.data.arr);
         }
         setLastId(id);
@@ -80,7 +78,7 @@ const UpdateInvoice = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [id, arr]);
+  }, [id]);
 
   const Change = (e) => {
     setObj({ ...obj, [e.target.name]: e.target.value });
@@ -104,13 +102,30 @@ const UpdateInvoice = () => {
     setArr(updatedData);
   };
 
-  const downloadPdfDocument = () => {
+  const downloadPdfDocument = (print) => {
     const input = document.getElementById("pdf");
-    html2canvas(input).then((canvas) => {
+    html2canvas(input, { useCORS: true }).then((canvas) => {
+      const componentWidth = input.offsetWidth;
+      const componentHeight = input.offsetHeight;
+
+      const orientation = componentWidth >= componentHeight ? "l" : "p";
+
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "JPEG", 0, 0);
-      pdf.save(`${id}.pdf`);
+      const pdf = new jsPDF({
+        orientation,
+        unit: "px",
+      });
+
+      pdf.internal.pageSize.width = componentWidth;
+      pdf.internal.pageSize.height = componentHeight;
+
+      pdf.addImage(imgData, "PNG", 0, 0, componentWidth, componentHeight);
+      if (print === true) {
+        pdf.autoPrint();
+        pdf.save(`${id}.pdf`);
+      } else {
+        pdf.save(`${id}.pdf`);
+      }
     });
   };
 
@@ -213,20 +228,23 @@ const UpdateInvoice = () => {
         <form onSubmit={Post} noValidate={false}>
           <div className="col-md-12">
             <div className="before-table-2">
-              <div className="invoice-cats">
-                <div>Preview</div>
-              </div>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  downloadPdfDocument(true);
+                }}
+              >
+                PRINT TO
+              </button>
 
-              <div className="new-invoice-2">
-                <btn
-                  className="btn btn-primary"
-                  onClick={() => {
-                    downloadPdfDocument();
-                  }}
-                >
-                  Download
-                </btn>
-              </div>
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  downloadPdfDocument(false);
+                }}
+              >
+                DOWNLOAD
+              </button>
             </div>
 
             <div className="invoice-div" id="pdf">

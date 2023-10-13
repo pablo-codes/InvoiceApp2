@@ -106,7 +106,6 @@ tbody tr:hover {
 }
 
 .new-invoice-2 {
-  background-color: black;
   color: white;
   display: flex;
   align-items: center;
@@ -116,7 +115,6 @@ tbody tr:hover {
   border-radius: 3.5px;
   border: 1px solid black;
   margin-bottom: 10px;
-  cursor: not-allowed;
   opacity: 0.4;
 }
 

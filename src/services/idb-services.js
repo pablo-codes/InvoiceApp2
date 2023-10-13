@@ -26,7 +26,7 @@ const createSettings = async (Settings) => {
       const updatedRecord = { ...existingRecord, ...Settings };
       await store.add(updatedRecord);
     } else {
-    await store.add(Settings);
+      await store.add(Settings);
     }
     await tx.oncomplete;
     return { success: true, message: "Settings created successfully" };
@@ -52,7 +52,6 @@ const readInvoices = async () => {
 const readSettings = async () => {
   try {
     const db = await newdbPromise;
-    console.log(db.objectStoreNames);
     const tx = db.transaction("settings", "readonly");
     const store = tx.objectStore("settings");
     const invoices = await store.get(1);
@@ -149,6 +148,31 @@ const lastId = async () => {
   }
 };
 
+const Search = async (regexPattern) => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("invoice", "readonly");
+    const store = tx.objectStore("invoice");
+
+    const matches = [];
+
+    let cursor = await store.openCursor();
+
+    while (cursor) {
+      const details = cursor.value.obj;
+      if (details && details.name) {
+        const regex = new RegExp(regexPattern, "i");
+        if (regex.test(details.name)) {
+          matches.push(cursor.value);
+        }
+      }
+    }
+    return { success: true, data: matches };
+  } catch (error) {
+    return { success: false, message: "No customer name matching the query" };
+  }
+};
+
 const IdbService = {
   createInvoice,
   readInvoices,
@@ -159,6 +183,7 @@ const IdbService = {
   lastId,
   createSettings,
   readSettings,
+  Search,
 };
 
 export default IdbService;
