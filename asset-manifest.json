@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/InvoiceApp2/static/css/main.4f3cbda9.css",
-    "main.js": "/InvoiceApp2/static/js/main.936b613c.js",
+    "main.css": "/InvoiceApp2/static/css/main.c0472352.css",
+    "main.js": "/InvoiceApp2/static/js/main.dadd01e5.js",
     "static/js/703.f2c60403.chunk.js": "/InvoiceApp2/static/js/703.f2c60403.chunk.js",
     "static/js/598.a2c0d5b7.chunk.js": "/InvoiceApp2/static/js/598.a2c0d5b7.chunk.js",
     "static/js/787.c4e7f8f9.chunk.js": "/InvoiceApp2/static/js/787.c4e7f8f9.chunk.js",
@@ -13,14 +13,14 @@
     "static/media/2.svg": "/InvoiceApp2/static/media/2.effd780df8e79b12e8141ebd72359bb1.svg",
     "static/media/1.svg": "/InvoiceApp2/static/media/1.106153d1a95095cf1f6b448dbf56217f.svg",
     "static/media/icon_search.svg": "/InvoiceApp2/static/media/icon_search.fc7a83c110dae57b85a3e4ce3b412a24.svg",
-    "main.4f3cbda9.css.map": "/InvoiceApp2/static/css/main.4f3cbda9.css.map",
-    "main.936b613c.js.map": "/InvoiceApp2/static/js/main.936b613c.js.map",
+    "main.c0472352.css.map": "/InvoiceApp2/static/css/main.c0472352.css.map",
+    "main.dadd01e5.js.map": "/InvoiceApp2/static/js/main.dadd01e5.js.map",
     "703.f2c60403.chunk.js.map": "/InvoiceApp2/static/js/703.f2c60403.chunk.js.map",
     "598.a2c0d5b7.chunk.js.map": "/InvoiceApp2/static/js/598.a2c0d5b7.chunk.js.map",
     "787.c4e7f8f9.chunk.js.map": "/InvoiceApp2/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4f3cbda9.css",
-    "static/js/main.936b613c.js"
+    "static/css/main.c0472352.css",
+    "static/js/main.dadd01e5.js"
   ]
 }
