@@ -105,7 +105,6 @@ const DashBody = () => {
                                   My Profile <i className="ti-user"></i>
                                 </Link>
                                 <Link to="/settings">
-                                  {" "}
                                   Settings <i className="ti-settings"></i>
                                 </Link>
                                 <a href="">
