@@ -2,7 +2,7 @@ on:
  push:
   branches:
   - master
-name: 🛫Deploy to InvoiceApp
+name: 🛸Deploy to Your InvoiceApp
 
 jobs: 
  web-deploy:
@@ -11,6 +11,10 @@ jobs:
   steps:
   - name: Get latest code
     uses: actions/checkout@v3
+
+  - name: Set CI environment variable
+    env:
+      CI: false
 
   - name: Uses node 18
     uses: actions/setup-node@v3
