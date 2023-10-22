@@ -9,6 +9,7 @@ import DashMain from "./components/Dashboard/body/DashMain";
 import Invoice from "./components/invoice/Invoice";
 import InvoiceList from "./components/invoice/InvoicesList";
 import UpdateInvoice from "./components/invoice/UpdateInvoice";
+import AddProducts from "./components/Products/AddProducts";
 
 // import Invoice from './components/Settings/Invoice';
 
@@ -16,7 +17,7 @@ const App = () => {
   const [connection, setConnection] = useState();
   useEffect(() => {
     const connect = async () => {
-      const response = await fetch("https://www.google.com", {
+      await fetch("https://www.google.com", {
         method: "HEAD",
         mode: "no-cors",
       })
@@ -56,9 +57,11 @@ const App = () => {
             path="/update-invoice/:id"
             element={<UpdateInvoice connection={connection} />}
           />
+          <Route
+            path="/product"
+            element={<AddProducts connection={connection} />}
+          />
         </Route>
-
-        {/* <Route path='/invoice' element={<Invoice />} /> */}
       </Routes>
     </>
   );

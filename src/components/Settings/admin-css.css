@@ -339,3 +339,34 @@ tbody tr:hover {
 .form-floating>input:valid+label {
   transform: translate(-0.25rem, -0.5rem) scale(0.75);
 }
+
+.tooltip {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.tooltip-inner {
+  font-size: 1rem;
+  color: white;
+  max-width: 269px;
+}
+.tooltip-inner > p {
+  font-size: 1rem;
+  color: white;
+}
+
+.tooltip-arrow {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-top: 1px solid #ccc;
+  bottom: -0.3rem;
+  left: 0.5rem;
+  position: absolute;
+  transform: rotate(45deg);
+}
+.tooltip-arrow.bottom {
+  transform: rotate(-90deg);
+}

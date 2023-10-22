@@ -4,7 +4,7 @@ import "./admin-css.css";
 import { AiOutlineStop } from "react-icons/ai";
 import cloudinaryService from "../../services/cloudinary-services";
 import { useNavigate } from "react-router-dom";
-import Loader from "../Animation/Loader";
+import Saved from "../Animation/Saved";
 import IdbService from "../../services/idb-services";
 
 const Settings = () => {
@@ -35,13 +35,11 @@ const Settings = () => {
     // setcookies("token", "biglongshlong", { path: "/", expires: news });
 
     if (image.files) {
-    
-    
       document.getElementById(
         "img"
       ).style.backgroundImage = `url(${settings.companyLogo})`;
     }
-  }, [image,settings]);
+  }, [image, settings]);
 
   useEffect(() => {
     IdbService.readSettings()
@@ -64,60 +62,11 @@ const Settings = () => {
   const handleImageChange = (event) => {
     const pic = event.target.files;
     if (pic.length === 1) {
-      setImage({ ...image, "files": event.target.files[0] });
+      setImage({ ...image, files: event.target.files[0] });
 
       const uri = URL.createObjectURL(event.target.files[0]);
 
       setSettings({ ...settings, companyLogo: uri });
-    }
-  };
-
-  const Saved = () => {
-    if (loader === true) {
-      return (
-        <button
-          className={`btn btn-primary`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Loader style={loader} /> Submiting
-        </button>
-      );
-    } else if (loader === false) {
-      return (
-        <button
-          className={`btn btn-success`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Submited
-        </button>
-      );
-    } else {
-      return (
-        <button
-          className={`btn btn-secondary`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Submit
-        </button>
-      );
     }
   };
 
@@ -260,7 +209,7 @@ const Settings = () => {
       <div className="before-table-2">
         <div className="invoice-cats">
           <div className="new-invoice">
-            <Saved />
+            <Saved loader={loader} />
           </div>
         </div>
       </div>

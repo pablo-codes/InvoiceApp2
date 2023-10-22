@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../Settings/admin-css.css";
 import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
-import Loader from "../Animation/Loader";
+import Saved from "../Animation/Saved";
 import { useNavigate } from "react-router-dom";
 
 const Invoice = () => {
@@ -125,54 +125,7 @@ const Invoice = () => {
     //   });
     setTotal(sum);
   }, [arr]);
-  const Saved = () => {
-    if (loader === true) {
-      return (
-        <button
-          className={`btn btn-primary`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Loader style={loader} /> Saving
-        </button>
-      );
-    } else if (loader === false) {
-      return (
-        <button
-          className={`btn btn-success`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Saved
-        </button>
-      );
-    } else {
-      return (
-        <button
-          className={`btn btn-secondary`}
-          style={{
-            width: "140px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Save
-        </button>
-      );
-    }
-  };
+
   const Post = (e) => {
     e.preventDefault();
     if (tots > 0 && tots === arr.length) {
@@ -453,7 +406,7 @@ const Invoice = () => {
             <div className="before-table-2">
               <div className="invoice-cats">
                 <div className="new-invoice">
-                  <Saved />
+                  <Saved loader={loader} />
                 </div>
               </div>
               <div className="new-invoice">

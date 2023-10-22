@@ -3,7 +3,7 @@ import "../Settings/admin-css.css";
 import { useParams } from "react-router-dom";
 import { AiOutlineStop } from "react-icons/ai";
 import IdbService from "../../services/idb-services";
-import Loader from "../Animation/Loader";
+import Saved from "../Animation/Saved";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 const UpdateInvoice = () => {
@@ -150,54 +150,7 @@ const UpdateInvoice = () => {
 
     setTotal(sum);
   }, [arr]);
-  const Saved = () => {
-    if (loader === true) {
-      return (
-        <button
-          className={`btn btn-primary`}
-          style={{
-            width: "130px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Loader style={loader} /> Updating
-        </button>
-      );
-    } else if (loader === false) {
-      return (
-        <button
-          className={`btn btn-success`}
-          style={{
-            width: "130px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Updated
-        </button>
-      );
-    } else {
-      return (
-        <button
-          className={`btn btn-secondary`}
-          style={{
-            width: "130px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Update
-        </button>
-      );
-    }
-  };
+
   const Post = (e) => {
     e.preventDefault();
     if (tots > 0 && tots === arr.length) {
@@ -482,7 +435,7 @@ const UpdateInvoice = () => {
             <div className="before-table-2">
               <div className="invoice-cats">
                 <div className="new-invoice">
-                  <Saved />
+                  <Saved loader={loader} />
                 </div>
               </div>
               <div className="new-invoice">

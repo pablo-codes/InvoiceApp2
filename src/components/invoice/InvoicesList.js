@@ -9,12 +9,19 @@ const InvoiceList = (props) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (query) {
-      console.log(query);
-      const matches = invoices.filter((item) => {
-        const regex = new RegExp(query, "i");
-        return regex.test(item.obj.name);
-      });
-      setInvoices(matches);
+      IdbService.Search(query)
+        .then((e) => {
+          // setInvoices(e.data)
+          if (e.success) {
+            setInvoices(e.data);
+          } else {
+            console.log("error");
+          }
+          // console.log(e.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       IdbService.readInvoices()
         .then((e) => {

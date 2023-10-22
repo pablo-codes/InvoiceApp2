@@ -1,5 +1,6 @@
 import dbPromise from "../idb";
 import newdbPromise from "../idb2";
+import dbPromise3 from "../idb3";
 
 const createInvoice = async (Invoice) => {
   try {
@@ -33,6 +34,40 @@ const createSettings = async (Settings) => {
   } catch (error) {
     console.error("Error creating invoice:", error);
     return { success: false, message: "Error creating setting" };
+  }
+};
+
+const createProducts = async (Products, id) => {
+  try {
+    const db = await dbPromise3;
+    const tx = db.transaction("products", "readwrite");
+    const store = tx.objectStore("products");
+    const existingRecord = await store.get(Products.barcode);
+
+    if (existingRecord) {
+      // Update the existing record
+      await store.put({ ...existingRecord, ...Products });
+    } else {
+      await store.add(Products);
+    }
+    await tx.oncomplete;
+    return { success: true, message: "Products created successfully" };
+  } catch (error) {
+    console.error("Error creating Products:", error);
+    return { success: false, message: "Error creating Products" };
+  }
+};
+
+const readProducts = async () => {
+  try {
+    const db = await dbPromise3;
+    const tx = db.transaction("products", "readonly");
+    const store = tx.objectStore("products");
+    const products = await store.getAll();
+    return { success: true, data: products };
+  } catch (error) {
+    console.error("Error reading products:", error);
+    return { success: false, message: "Error reading products" };
   }
 };
 
@@ -166,6 +201,33 @@ const Search = async (regexPattern) => {
           matches.push(cursor.value);
         }
       }
+      cursor = await cursor.continue();
+    }
+    return { success: true, data: matches };
+  } catch (error) {
+    return { success: false, message: "No customer name matching the query" };
+  }
+};
+
+const barcodeSearch = async (regexPattern) => {
+  try {
+    const db = await dbPromise3;
+    const tx = db.transaction("products", "readonly");
+    const store = tx.objectStore("products");
+
+    const matches = [];
+
+    let cursor = await store.openCursor();
+
+    while (cursor) {
+      const details = cursor.value;
+      if (details && details.barcode) {
+        const regex = new RegExp(regexPattern, "i");
+        if (regex.test(details.barcode)) {
+          matches.push(cursor.value);
+        }
+      }
+      cursor = await cursor.continue();
     }
     return { success: true, data: matches };
   } catch (error) {
@@ -184,6 +246,9 @@ const IdbService = {
   createSettings,
   readSettings,
   Search,
+  createProducts,
+  readProducts,
+  barcodeSearch,
 };
 
 export default IdbService;

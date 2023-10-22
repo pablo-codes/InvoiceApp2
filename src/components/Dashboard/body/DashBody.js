@@ -107,7 +107,7 @@ const DashBody = () => {
                                 <Link to="/settings">
                                   Settings <i className="ti-settings"></i>
                                 </Link>
-                                <a href="">
+                                <a>
                                   Log Out <i className="ti-shift-left"></i>
                                 </a>
                               </div>

@@ -1,10 +1,12 @@
 import React from "react";
-import { RiSettingsLine, RiImageLine } from "react-icons/ri";
+import { RiSettingsLine } from "react-icons/ri";
 import { IoCreateOutline } from "react-icons/io5";
+import { BiPackage } from "react-icons/bi";
+import { LuPackagePlus } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import img1 from "../img/1.svg";
 import img2 from "../img/2.svg";
-import img3 from "../img/3.svg";
+
 const DashNav = () => {
   return (
     <nav className="sidebar">
@@ -33,6 +35,18 @@ const DashNav = () => {
           <Link to="/invoice">
             <IoCreateOutline size={"20px"} />
             <span className="bars-span">Create</span>
+          </Link>
+        </li>
+        <li className="bars">
+          <Link to="/invoice">
+            <BiPackage size={"20px"} />
+            <span className="bars-span">Product</span>
+          </Link>
+        </li>
+        <li className="bars">
+          <Link to="/product">
+            <LuPackagePlus size={"20px"} />
+            <span className="bars-span">Add</span>
           </Link>
         </li>
         {/* <li className="bars">
