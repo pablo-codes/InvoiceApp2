@@ -2,20 +2,31 @@ on:
  push:
   branches:
   - master
-name: Deploy to Your Site
+name: 🛫Deploy to InvoiceApp
 
 jobs: 
  web-deploy:
-  name: Deploy
+  name: 🎊Deploy
   runs-on: ubuntu-latest
   steps:
   - name: Get latest code
     uses: actions/checkout@v3
 
-  - name: Sync files
+  - name: Uses node 18
+    uses: actions/setup-node@v3
+    with:
+      node-version: '18'
+
+  - name: 💻Build Project
+    run: |
+     npm install
+     npm run build
+
+  - name: 📁Sync files
     uses: Samkirkland/FTP-Deploy-Action@v4.3.4
     with:
       server: ftp.francisokpani.com
       username: ${{ secrets.ftp_username }}
       password: ${{ secrets.ftp_password }}
       server-dir: /public_html/invoiceapp/
+      local-dir: ./build/
