@@ -26,7 +26,7 @@ const AddProducts = () => {
   const [loader, setLoader] = useState();
   const [option, setOption] = useState(initopt);
   const [barcode, setBarcode] = useState();
-  const [barcodeid, setBarcodeid] = useState();
+  const [barcodeid, setBarcodeid] = useState("");
   const [tooltip, setTooltip] = useState("hide");
 
   const add = (e) => {
