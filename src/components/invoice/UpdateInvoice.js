@@ -57,7 +57,7 @@ const UpdateInvoice = () => {
   useEffect(() => {
     IdbService.getInvoice(Number(id))
       .then((e) => {
-        if (e.data.arr.length > 1) {
+        if (e.data.arr.length >= 1) {
           setArr(e.data.arr);
         }
         setLastId(id);

@@ -10,6 +10,7 @@ import Invoice from "./components/invoice/Invoice";
 import InvoiceList from "./components/invoice/InvoicesList";
 import UpdateInvoice from "./components/invoice/UpdateInvoice";
 import AddProducts from "./components/Products/AddProducts";
+import AllProducts from "./components/Products/AllProducts";
 
 // import Invoice from './components/Settings/Invoice';
 
@@ -52,6 +53,10 @@ const App = () => {
           <Route
             path="/all-invoice"
             element={<InvoiceList connection={connection} />}
+          />
+          <Route
+            path="/all-product"
+            element={<AllProducts connection={connection} />}
           />
           <Route
             path="/update-invoice/:id"

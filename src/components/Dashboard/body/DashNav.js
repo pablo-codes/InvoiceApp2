@@ -38,7 +38,7 @@ const DashNav = () => {
           </Link>
         </li>
         <li className="bars">
-          <Link to="/invoice">
+          <Link to="/all-product">
             <BiPackage size={"20px"} />
             <span className="bars-span">Product</span>
           </Link>

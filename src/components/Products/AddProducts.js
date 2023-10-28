@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../Settings/admin-css.css";
 import Saved from "../Animation/Saved";
 import IdbService from "../../services/idb-services";
+import { useNavigate } from "react-router-dom";
 
 const AddProducts = () => {
+  const navigate = useNavigate();
   const initarr = [
     {
       key: 1,
@@ -38,7 +40,6 @@ const AddProducts = () => {
         key: news,
         barcode: "",
         qty: "",
-        id: "",
         name: "",
         price: "",
       },
@@ -61,6 +62,18 @@ const AddProducts = () => {
     });
     setArr(updatedData);
   };
+
+  const handleOptionChange = (el, els) => {
+    const updatedData = arr.map((item) => {
+      if (item.key === el.key) {
+        const updatedItem = { ...el, ...els };
+        return updatedItem;
+      }
+      return item;
+    });
+    setArr(updatedData);
+  };
+
   useEffect(() => {
     IdbService.barcodeSearch(barcode)
       .then((e) => {
@@ -76,23 +89,32 @@ const AddProducts = () => {
       console.log(e.data);
     });
   }, [barcode]);
+  const check = (key) => {
+    for (const keys of arr) {
+      const element = document.getElementById(`bar${keys.key}`);
+      if (element) {
+        if (keys.key !== key) {
+          element.style.display = "none";
+        } else {
+          element.style.display = "block";
+        }
+      }
+    }
+  };
 
   const Post = (e) => {
     e.preventDefault();
     setLoader(true);
-    for (let i = 0; i < arr.length; i++) {
-      try {
-        const el = arr[i];
-        IdbService.createProducts(el)
-          .then((e) => {
-            console.log(e.success, e.message);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+    for (const el of arr) {
+      IdbService.createProducts(el)
+        .then((e) => {
+          console.log(e.success, e.message);
+          setLoader(false);
+          navigate("/all-product");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -118,53 +140,11 @@ const AddProducts = () => {
                       value={el.barcode}
                       onChange={(e) => {
                         handleInputChange(e.target.value, el.key, "barcode");
-                        setTooltip("show");
+                        check(el.key);
                       }}
                       className="form-control"
                       name="barcode"
                     />
-                    <div
-                      className={`tooltip bs-tooltip-auto fade ${tooltip}`}
-                      role="tooltip"
-                      id="tooltip296696"
-                      data-popper-placement="right"
-                      style={{
-                        position: "absolute",
-                        inset: "0px auto auto 0px",
-                        margin: "0px",
-                        border: "0",
-                        transform: "translate(651px, 282px)",
-                      }}
-                    >
-                      <div
-                        className="tooltip-arrow"
-                        style={{
-                          position: "absolute",
-                          top: "0px",
-                          transform: "translate(0px, 0px)",
-                        }}
-                      ></div>
-                      <div
-                        className="tooltip-inner"
-                        style={{ maxWidth: "269px" }}
-                      >
-                        {option &&
-                          option.map((el) => {
-                            if (el.name) {
-                              return (
-                                <p
-                                  key={el.key}
-                                  onClick={() => {
-                                    setTooltip("hide");
-                                  }}
-                                >
-                                  {el.name}
-                                </p>
-                              );
-                            }
-                          })}
-                      </div>
-                    </div>
                   </td>
 
                   <td>
@@ -182,6 +162,55 @@ const AddProducts = () => {
                       data-bs-trigger="click"
                       data-bs-html="true"
                     />
+                    {(function hello() {
+                      if (option.length >= 1) {
+                        return (
+                          <div id={`bar${el.key}`} style={{ display: "none" }}>
+                            <div
+                              className={`tooltip bs-tooltip-auto fade show`}
+                              role="tooltip"
+                              id="tooltip296696"
+                              data-popper-placement="right"
+                              style={{
+                                position: "relative",
+                                inset: "0px auto auto 0px",
+                                margin: "0px",
+                                transform: "translate(0px,0px)",
+                                border: "0",
+                              }}
+                            >
+                              <div
+                                className="tooltip-arrow"
+                                style={{
+                                  position: "absolute",
+                                  top: "0px",
+                                  transform: "translate(0px, 0px)",
+                                }}
+                              ></div>
+                              <div
+                                className="tooltip-inner"
+                                style={{ maxWidth: "269px" }}
+                              >
+                                {option.map((els) => {
+                                  if (els.name) {
+                                    return (
+                                      <p
+                                        key={els.id}
+                                        onClick={() => {
+                                          handleOptionChange(el, els);
+                                        }}
+                                      >
+                                        {els.name}
+                                      </p>
+                                    );
+                                  }
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })()}
                   </td>
                   <td>
                     <input

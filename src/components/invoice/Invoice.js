@@ -37,6 +37,8 @@ const Invoice = () => {
   const [loader, setLoader] = useState();
   const [lastId, setLastId] = useState(0);
   const [tots, setTots] = useState(0);
+  const [barcode, setBarcode] = useState("");
+  const [option, setOption] = useState("");
   const navigate = useNavigate;
   const add = () => {
     const news = arr.length + 1;
@@ -85,6 +87,13 @@ const Invoice = () => {
         if (fieldName === "amount") {
           console.warn("cannot change amount");
           return item;
+        } else if (fieldName === "rate") {
+          console.warn("cannot change rate");
+          return item;
+        } else if (fieldName === "description") {
+          setBarcode(updatedValue);
+          const updatedItem = { ...item, [fieldName]: updatedValue };
+          return updatedItem;
         } else {
           const updatedItem = { ...item, [fieldName]: updatedValue };
           updatedItem.amount =
@@ -98,6 +107,16 @@ const Invoice = () => {
   };
 
   useEffect(() => {
+    IdbService.barcodeandNameSearch(barcode)
+      .then((e) => {
+        if (e.data) {
+          setOption(e.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     let sum = 0;
 
     arr.forEach((e) => {
@@ -124,7 +143,35 @@ const Invoice = () => {
     //     console.log(e.success, e.message);
     //   });
     setTotal(sum);
-  }, [arr]);
+  }, [arr, barcode]);
+
+  const check = (key) => {
+    for (const keys of arr) {
+      const element = document.getElementById(`bar${keys.key}`);
+      if (element) {
+        if (keys.key !== key) {
+          element.style.display = "none";
+        } else {
+          element.style.display = "block";
+        }
+      }
+    }
+  };
+
+  const handleOptionChange = (el, els) => {
+    const updatedData = arr.map((item) => {
+      if (item.key === el.key) {
+        const updatedItem = {
+          ...el,
+          description: els.name, // Set "name" from "description"
+          rate: els.price,
+        };
+        return updatedItem;
+      }
+      return item;
+    });
+    setArr(updatedData);
+  };
 
   const Post = (e) => {
     e.preventDefault();
@@ -303,16 +350,73 @@ const Invoice = () => {
                             <input
                               type="text"
                               value={el.description}
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 handleInputChange(
                                   e.target.value,
                                   el.key,
                                   "description"
-                                )
-                              }
+                                );
+                                check(el.key);
+                              }}
                               className="form-control"
                               name="description"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="bottom"
+                              data-bs-trigger="click"
+                              data-bs-html="true"
                             />
+                            {(function hello() {
+                              if (option.length >= 1) {
+                                return (
+                                  <div
+                                    id={`bar${el.key}`}
+                                    style={{ display: "none" }}
+                                  >
+                                    <div
+                                      className={`tooltip bs-tooltip-auto fade show`}
+                                      role="tooltip"
+                                      id="tooltip296696"
+                                      data-popper-placement="right"
+                                      style={{
+                                        position: "relative",
+                                        inset: "0px auto auto 0px",
+                                        margin: "0px",
+                                        transform: "translate(0px,0px)",
+                                        border: "0",
+                                      }}
+                                    >
+                                      <div
+                                        className="tooltip-arrow"
+                                        style={{
+                                          position: "absolute",
+                                          top: "0px",
+                                          transform: "translate(0px, 0px)",
+                                        }}
+                                      ></div>
+                                      <div
+                                        className="tooltip-inner"
+                                        style={{ maxWidth: "269px" }}
+                                      >
+                                        {option.map((els) => {
+                                          if (els.name) {
+                                            return (
+                                              <p
+                                                key={els.id}
+                                                onClick={() => {
+                                                  handleOptionChange(el, els);
+                                                }}
+                                              >
+                                                {els.name}
+                                              </p>
+                                            );
+                                          }
+                                        })}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              }
+                            })()}
                           </td>
                           <td>
                             <input
@@ -367,7 +471,7 @@ const Invoice = () => {
                       </tr>
                       <tr id="tbtd-p">
                         <td id="error" style={{ display: "none" }}>
-                          <h4 id="lengd" class="text text-danger">
+                          <h4 id="lengd" className="text text-danger">
                             <AiOutlineStop /> fill all the boxes
                           </h4>
                         </td>
@@ -385,7 +489,7 @@ const Invoice = () => {
                 <div>
                   <legend
                     style={{ width: "31%", position: "relative", left: "65%" }}
-                    class="legendn text-danger"
+                    className="legendn text-danger"
                   >
                     <AiOutlineStop /> fill all the boxes
                   </legend>
