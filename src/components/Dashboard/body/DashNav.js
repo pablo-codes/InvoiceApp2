@@ -2,7 +2,7 @@ import React from "react";
 import { RiSettingsLine } from "react-icons/ri";
 import { IoCreateOutline } from "react-icons/io5";
 import { BiPackage } from "react-icons/bi";
-import { LuPackagePlus } from "react-icons/lu";
+import { LuPackagePlus, LuUserCircle2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import img1 from "../img/1.svg";
 import img2 from "../img/2.svg";
@@ -55,6 +55,12 @@ const DashNav = () => {
             <span className="bars-span">Images</span>
           </Link>
         </li> */}
+        <li className="bars">
+          <Link to="/profile">
+            <LuUserCircle2 size={"20px"} />
+            <span className="bars-span">Profile</span>
+          </Link>
+        </li>
         <li className="bars">
           <Link to="/settings">
             <RiSettingsLine size={"20px"} />

@@ -44,7 +44,8 @@ const AllProducts = () => {
           <th>Barcode</th>
           <th>Name</th>
           <th>Qty</th>
-          <th>Price</th>
+          <th>Cost Price</th>
+          <th>Sale Price</th>
         </tr>
       </thead>
       <tbody>
@@ -54,7 +55,8 @@ const AllProducts = () => {
             <td>{products.barcode}</td>
             <td>{products.name}</td>
             <td>{products.qty}</td>
-            <td>{products.price}</td>
+            <td>{products.cprice}</td>
+            <td>{products.sprice}</td>
           </tr>
         ))}
       </tbody>

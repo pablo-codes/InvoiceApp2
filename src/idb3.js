@@ -17,7 +17,16 @@ function createDatabase(db) {
     productStore.createIndex("qty", "qty", {
       unique: false,
     });
-    productStore.createIndex("price", "price", {
+    productStore.createIndex("cprice", "cprice", {
+      unique: false,
+    });
+    productStore.createIndex("sprice", "sprice", {
+      unique: false,
+    });
+    productStore.createIndex("cdate", "cdate", {
+      unique: false,
+    });
+    productStore.createIndex("udate", "udate", {
       unique: false,
     });
   }

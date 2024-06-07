@@ -15,6 +15,7 @@ const checkBarcode = async (data) => {
         await store.put({
           ...existingRecord,
           qty: existingRecord.qty - data.qty,
+          udate: Date.now()
         });
         console.log(existingRecord);
       }
@@ -82,13 +83,15 @@ const createProducts = async (Products) => {
       const tx = db.transaction("products", "readwrite");
       const store = tx.objectStore("products");
       const existingRecord = await store.index("barcode").get(Products.barcode);
-
+      const date = Date.now()
       if (existingRecord) {
         // Update the existing record
+        Products.udate = date
         await store.put({ ...existingRecord, ...Products });
         console.log(existingRecord);
       } else {
         // Add a new record
+        Products.cdate = date
         console.log(existingRecord);
         await store.add(Products);
       }
@@ -136,10 +139,16 @@ const readSettings = async () => {
     const db = await newdbPromise;
     const tx = db.transaction("settings", "readonly");
     const store = tx.objectStore("settings");
-    const invoices = await store.get(1);
-    return { success: true, data: invoices };
+    const profile = await store.get(1);
+    if (profile === undefined) {
+      console.error("Error reading Profile:", 'Create a Profile');
+      return { success: false, message: "please create a profile" };
+    } else {
+      return { success: true, data: profile };
+    }
+
   } catch (error) {
-    console.error("Error reading invoices:", error);
+    console.error("Error reading Profile:", error);
     return { success: false, message: "Error reading invoices" };
   }
 };
@@ -150,6 +159,7 @@ const getInvoice = async (id) => {
     const tx = db.transaction("invoice", "readonly");
     const store = tx.objectStore("invoice");
     const invoice = await store.get(id);
+
     return { success: true, data: invoice };
   } catch (error) {
     console.error("Error reading invoices:", error);

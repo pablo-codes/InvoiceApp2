@@ -132,7 +132,7 @@ const DashBody = () => {
                 <div className="footer_iner text-center">
                   <p>
                     2023 © Influence - Designed by{" "}
-                    <a href="https://pablo-codes.github.io/">pablo-codes</a>
+                    <a target="_blank" href="https://pablo-codes.github.io/">pablo-codes</a>
                   </p>
                 </div>
               </div>

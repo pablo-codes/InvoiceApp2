@@ -117,7 +117,7 @@ const Settings = () => {
       <div className="invoice-div">
         <div className="part-2">
           <div className="from-side-2">
-            <h2>Settings</h2>
+            <h2>Profile</h2>
             <div>
               <legend
                 style={{ width: "31%", position: "relative", left: "65%" }}

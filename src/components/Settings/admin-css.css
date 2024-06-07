@@ -32,7 +32,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   border-collapse: collapse;
-  width: 85%;
+  width: 95% !important;
 }
 
 thead {
@@ -123,7 +123,7 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   /* background-color: red; */
-  width: 100%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
   border: 1px dotted black;
@@ -238,7 +238,6 @@ tbody tr:hover {
 }
 
 .part-4 textarea {
- 
   border-radius: 2.5px;
 }
 
@@ -322,21 +321,20 @@ tbody tr:hover {
   position: relative;
 }
 
-.form-floating>input {
+.form-floating > input {
   padding-top: 1rem;
   margin-top: 0.2rem;
 }
 
-.form-floating>label {
-
+.form-floating > label {
   transition: transform 0.1s ease-in-out;
 }
 
-.form-floating>input:focus+label {
+.form-floating > input:focus + label {
   transform: translate(-0.25rem, -0.5rem) scale(0.75);
 }
 
-.form-floating>input:valid+label {
+.form-floating > input:valid + label {
   transform: translate(-0.25rem, -0.5rem) scale(0.75);
 }
 
@@ -369,4 +367,14 @@ tbody tr:hover {
 }
 .tooltip-arrow.bottom {
   transform: rotate(-90deg);
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.container h3 {
+  margin: 0;
 }

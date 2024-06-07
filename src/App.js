@@ -11,6 +11,9 @@ import InvoiceList from "./components/invoice/InvoicesList";
 import UpdateInvoice from "./components/invoice/UpdateInvoice";
 import AddProducts from "./components/Products/AddProducts";
 import AllProducts from "./components/Products/AllProducts";
+import Profile from "./components/Settings/Profile";
+import Charts from "./components/Animation/Chart";
+import ChartComponent from "./components/Animation/Chart2";
 
 // import Invoice from './components/Settings/Invoice';
 
@@ -42,8 +45,12 @@ const App = () => {
         <Route path="/" element={<DashBody />}>
           <Route index element={<DashMain connection={connection} />} />
           <Route
-            path="/settings"
+            path="/profile"
             element={<Settings connection={connection} />}
+          />
+          <Route
+            path="/settings"
+            element={<Profile connection={connection} />}
           />
           <Route
             path="/invoice"
@@ -65,6 +72,14 @@ const App = () => {
           <Route
             path="/product"
             element={<AddProducts connection={connection} />}
+          />
+          <Route
+            path="/chart"
+            element={<Charts />}
+          />
+          <Route
+            path="/chart2"
+            element={<ChartComponent />}
           />
         </Route>
       </Routes>

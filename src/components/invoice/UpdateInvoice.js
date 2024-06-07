@@ -122,9 +122,9 @@ const UpdateInvoice = () => {
       pdf.addImage(imgData, "PNG", 0, 0, componentWidth, componentHeight);
       if (print === true) {
         pdf.autoPrint();
-        pdf.save(`${id}.pdf`);
+        pdf.save(`invoice${id}.pdf`);
       } else {
-        pdf.save(`${id}.pdf`);
+        pdf.save(`invoice${id}.pdf`);
       }
     });
   };

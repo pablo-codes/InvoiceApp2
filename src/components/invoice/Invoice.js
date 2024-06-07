@@ -54,17 +54,6 @@ const Invoice = () => {
     ]);
   };
   useEffect(() => {
-    IdbService.lastId()
-      .then((e) => {
-        if (typeof e.data !== "number") {
-          setLastId(1);
-        } else {
-          setLastId(e.data + 1);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
     IdbService.readSettings()
       .then((e) => {
         setFrom(e.data);
@@ -75,6 +64,20 @@ const Invoice = () => {
       .catch((err) => {
         console.log(err);
       });
+    IdbService.lastId()
+      .then((e) => {
+        if (typeof e.data !== "number") {
+          setLastId(1);
+          setObj({ ...obj, "name": `customer${1}` });
+        } else {
+          setLastId(e.data + 1);
+          setObj({ ...obj, "name": `customer${e.data + 1}` });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   }, [lastId]);
 
   const Change = (e) => {
@@ -161,10 +164,11 @@ const Invoice = () => {
   const handleOptionChange = (el, els) => {
     const updatedData = arr.map((item) => {
       if (item.key === el.key) {
+        console.log(els)
         const updatedItem = {
           ...el,
-          description: els.name, // Set "name" from "description"
-          rate: els.price,
+          description: els.name,
+          rate: els.sprice,
         };
         return updatedItem;
       }
@@ -200,7 +204,7 @@ const Invoice = () => {
   return (
     <div className="container">
       <div className="row">
-        <form onSubmit={Post} noValidate={false}>
+        <form onSubmit={Post} noValidate={true}>
           <div className="col-md-12">
             <div className="before-table-2">
               <div className="invoice-cats">

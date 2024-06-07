@@ -12,7 +12,8 @@ const AddProducts = () => {
       barcode: "",
       qty: "",
       name: "",
-      price: "",
+      cprice: "",
+      sprice: "",
     },
   ];
   const initopt = [
@@ -21,7 +22,8 @@ const AddProducts = () => {
       barcode: "",
       qty: "",
       name: "",
-      price: "",
+      cprice: "",
+      sprice: "",
     },
   ];
   const [arr, setArr] = useState(initarr);
@@ -41,7 +43,8 @@ const AddProducts = () => {
         barcode: "",
         qty: "",
         name: "",
-        price: "",
+        cprice: "",
+        sprice: "",
       },
     ]);
   };
@@ -128,7 +131,8 @@ const AddProducts = () => {
                 <th>Barcode</th>
                 <th>Name</th>
                 <th>QTY</th>
-                <th>Price</th>
+                <th>Cost Price</th>
+                <th>Sale Price</th>
               </tr>
             </thead>
             <tbody>
@@ -226,12 +230,23 @@ const AddProducts = () => {
                   <td>
                     <input
                       type="number"
-                      value={el.price}
+                      value={el.cprice}
                       onChange={(e) =>
-                        handleInputChange(e.target.value, el.key, "price")
+                        handleInputChange(e.target.value, el.key, "cprice")
                       }
                       className="form-control"
-                      name="price"
+                      name="cprice"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={el.sprice}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, el.key, "sprice")
+                      }
+                      className="form-control"
+                      name="sprice"
                     />
                   </td>
                 </tr>
