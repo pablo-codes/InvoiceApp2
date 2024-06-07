@@ -62,9 +62,8 @@ const Invoice = () => {
             "img"
           ).style.backgroundImage = `url(${e.data.companyLogo})`;
         } else {
-          navigate('/profile')
+          window.location.href('profile')
         }
-
       })
       .catch((err) => {
         console.log(err);
@@ -83,7 +82,7 @@ const Invoice = () => {
         console.log(err);
       });
 
-  }, [lastId]);
+  }, [lastId, navigate]);
 
   const Change = (e) => {
     setObj({ ...obj, [e.target.name]: e.target.value });
@@ -418,7 +417,7 @@ const Invoice = () => {
                                                 {els.name}
                                               </p>
                                             );
-                                          }
+                                          } return ''
                                         })}
                                       </div>
                                     </div>
