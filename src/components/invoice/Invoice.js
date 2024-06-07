@@ -56,10 +56,15 @@ const Invoice = () => {
   useEffect(() => {
     IdbService.readSettings()
       .then((e) => {
-        setFrom(e.data);
-        document.getElementById(
-          "img"
-        ).style.backgroundImage = `url(${e.data.companyLogo})`;
+        if (e.success) {
+          setFrom(e.data);
+          document.getElementById(
+            "img"
+          ).style.backgroundImage = `url(${e.data.companyLogo})`;
+        } else {
+          navigate('/profile')
+        }
+
       })
       .catch((err) => {
         console.log(err);
