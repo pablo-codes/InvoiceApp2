@@ -90,14 +90,14 @@ const MONTHS = [
 
 function months(config) {
     var cfg = config || {};
-    var count = cfg.count || 12;
+    var count = cfg.count || 30;
     var section = cfg.section;
     var values = [];
     var i, value;
 
     for (i = 0; i < count; ++i) {
-        value = MONTHS[Math.ceil(i) % 12];
-        values.push(value.substring(0, section));
+        // value = MONTHS[Math.ceil(i) % 12];
+        values.push('Day ' + Number(i + 1));
     }
 
     return values;
@@ -131,7 +131,8 @@ const CHART_COLORS = {
     green: 'rgb(75, 192, 192)',
     blue: 'rgb(54, 162, 235)',
     purple: 'rgb(153, 102, 255)',
-    grey: 'rgb(201, 203, 207)'
+    grey: 'rgb(201, 203, 207)',
+    white: 'rgb(255,255,255)'
 };
 
 const NAMED_COLORS = [

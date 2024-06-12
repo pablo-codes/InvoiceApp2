@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 import Utils from './Util.js';
@@ -7,6 +7,16 @@ import 'chartjs-adapter-luxon';
 const ChartComponent = () => {
     const chartRef = useRef(null);
 
+
+    useEffect(() => {
+        const chart = chartRef.current;
+
+        if (chart) {
+
+
+            chart.update();
+        }
+    }, []);
     const actions = [
         {
             name: 'Randomize',
@@ -72,25 +82,71 @@ const ChartComponent = () => {
             }
         }
     ];
+    const getGradient = (ctx, chartArea, color) => {
+        const chartWidth = chartArea.right - chartArea.left;
+        const chartHeight = chartArea.bottom - chartArea.top;
+        let gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(0.7, 'white');
+        return gradient;
+    };
 
-    const DATA_COUNT = 7;
+    const DATA_COUNT = 30;
     const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
 
-    const labels = Utils.months({ count: 7 });
+    const labels = Utils.months({ count: 30 });
     const data = {
         labels: labels,
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'Impression',
+                fill: 'start',
+                pointStyle: false,
                 data: Utils.numbers(NUMBER_CFG),
                 borderColor: Utils.CHART_COLORS.red,
-                backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+                backgroundColor: function (context) {
+                    const chart = context.chart;
+                    const { ctx, chartArea } = chart;
+
+                    if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                    }
+                    return getGradient(ctx, chartArea, Utils.CHART_COLORS.red);
+                },
             },
             {
-                label: 'Dataset 2',
+                label: 'Click',
+                fill: 'start',
+                pointStyle: false,
                 data: Utils.numbers(NUMBER_CFG),
                 borderColor: Utils.CHART_COLORS.blue,
-                backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+                backgroundColor: function (context) {
+                    const chart = context.chart;
+                    const { ctx, chartArea } = chart;
+
+                    if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                    }
+                    return getGradient(ctx, chartArea, Utils.CHART_COLORS.blue);
+                },
+            }, {
+                label: 'View',
+                fill: 'start',
+                pointStyle: false,
+                data: Utils.numbers(NUMBER_CFG),
+                borderColor: Utils.CHART_COLORS.orange,
+                backgroundColor: function (context) {
+                    const chart = context.chart;
+                    const { ctx, chartArea } = chart;
+
+                    if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                    }
+                    return getGradient(ctx, chartArea, Utils.CHART_COLORS.orange);
+                },
             }
         ]
     };
@@ -100,6 +156,10 @@ const ChartComponent = () => {
         data: data,
         options: {
             responsive: true,
+            elements: {
+                line: { tension: '0.4' }
+            },
+
             plugins: {
                 legend: {
                     position: 'top',
